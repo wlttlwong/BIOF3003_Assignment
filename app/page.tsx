@@ -137,6 +137,25 @@ export default function Home() {
     }
   }
 
+  async function downloadLabelledData() {
+    setSegmentStatus(null);
+    try {
+      const res = await fetch('/api/download-labeled-data');
+      const blob = await res.blob();
+      // Trigger browser download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'labeled_data.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      setSegmentStatus('Error: download failed')
+    }
+  }
+
   async function sendToApi() {
     const res = await fetch('/api/echo', {
       method: 'POST',
@@ -328,32 +347,13 @@ export default function Home() {
           >
             Send labeled segment
           </button>
-          {segmentStatus && <p className="mt-2 text-sm">{segmentStatus}</p>}
-        </div>
-
-        <div className="pt-3 border-t">
           <button
-            onclick={async () => {
-              try {
-                const res = await fetch('/api/download-labeled', {
-                  method: 'GET',
-                });
-                if (!res.ok) throw new Error('Download failed');
-                const blob = await res.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `labeled_records_${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-                window.URL.revokeObjectURL(url);
-              } catch (err) {
-                alert('Failed to download labeled data');
-              }
-            }}
-            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+            onclick={downloadLabelledData}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
           >
-            Download Labeled Data (JSON)
-          </button>
+            Download labeled_data.json
+          </button> 
+          {segmentStatus && <p className="mt-2 text-sm">{segmentStatus}</p>}
         </div>
 
         {/* Assignment: Add Upload model and scaler UI here (Additional Work 2). */}
