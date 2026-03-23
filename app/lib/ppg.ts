@@ -1,4 +1,5 @@
 // app/lib/ppg.ts — pure signal helpers (no React, no DOM)
+import { SignalCombinationMode } from '../components/SignalCombinationSelector';
 import type { Valley, HeartRateResult, HRVResult } from '../types';
 
 export const FPS = 30;
@@ -100,9 +101,14 @@ export function computePPGFromRGB(
   gSum: number,
   bSum: number,
   pixelCount: number,
-  mode: string,
+  mode: SignalCombinationMode,
 ): number {
   // Default: 2R−G−B. Assignment: add cases for redOnly, greenOnly, 2xG-R-B (Additional Work 3).
-  if (mode === 'default') return (2 * rSum - gSum - bSum) / pixelCount;
-  return (2 * rSum - gSum - bSum) / pixelCount; // fallback
+  switch (mode) {
+    case 'green': return gSum / pixelCount;
+    case 'red': return rSum / pixelCount;
+    case 'blue': return bSum / pixelCount;
+    case 'default': return (2 * rSum - gSum - bSum) / pixelCount;
+    case 'twoGMinusRMinusB': return (2 * gSum - rSum - bSum) / pixelCount;
+  }
 }
