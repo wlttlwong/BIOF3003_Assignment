@@ -329,7 +329,31 @@ export default function Home() {
             Send labeled segment
           </button>
           {segmentStatus && <p className="mt-2 text-sm">{segmentStatus}</p>}
-          {/* Assignment: Add "Download labeled_records.json" button here (Additional Work 1). */}
+        </div>
+
+        <div className="pt-3 border-t">
+          <button
+            onclick={async () => {
+              try {
+                const res = await fetch('/api/download-labeled', {
+                  method: 'GET',
+                });
+                if (!res.ok) throw new Error('Download failed');
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `labeled_records_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+              } catch (err) {
+                alert('Failed to download labeled data');
+              }
+            }}
+            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+          >
+            Download Labeled Data (JSON)
+          </button>
         </div>
 
         {/* Assignment: Add Upload model and scaler UI here (Additional Work 2). */}
