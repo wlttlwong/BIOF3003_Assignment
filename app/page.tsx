@@ -341,6 +341,7 @@ export default function Home() {
               Bad
             </label>
           </div>
+          <div className="mt-4 flex flex-wrap gap-4">
           <button
             onClick={sendLabeledSegment}
             className="px-4 py-2 bg-amber-500 text-white rounded"
@@ -348,12 +349,13 @@ export default function Home() {
             Send labeled segment
           </button>
           <button
-            onclick={downloadLabelledData}
+            onClick={downloadLabelledData}
             className="px-4 py-2 bg-blue-500 text-white rounded"
           >
             Download labeled_data.json
           </button> 
           {segmentStatus && <p className="mt-2 text-sm">{segmentStatus}</p>}
+          </div>
         </div>
 
         {/* Assignment: Add Upload model and scaler UI here (Additional Work 2). */}
