@@ -5,8 +5,8 @@ export type SignalCombinationMode =
   | 'default'
   | 'green'
   | 'red'
-  | 'blue';
-  | 'twoGMinusRMinusB'
+  | 'blue'
+  | 'twoGMinusRMinusB';
 
 const SIGNAL_COMBINATION_OPTIONS: {
   value: SignalCombinationMode;

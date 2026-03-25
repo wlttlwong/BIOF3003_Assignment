@@ -11,6 +11,18 @@ export default function useCamera() {
   async function startCamera() {
     setError(null);
     try {
+      // Check if mediaDevices/getUserMedia is available (especially important on mobile / non-secure origins)
+      if (
+        typeof navigator === 'undefined' ||
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        setError(
+          'Camera API is not available. Use HTTPS or a supported browser to access the camera.',
+        );
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { width: 640, height: 480 },
       });

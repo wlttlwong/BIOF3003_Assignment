@@ -27,7 +27,7 @@ export default function Home() {
   type SegmentLabel = 'good' | 'bad';
   const [segmentLabel, setSegmentLabel] = useState<SegmentLabel>('good');
   const [segmentStatus, setSegmentStatus] = useState<string | null>(null);
-
+  const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
   const [inferenceResult, setInferenceResult] = useState<{
     label: string | null;
     confidence: number;
@@ -138,9 +138,12 @@ export default function Home() {
   }
 
   async function downloadLabelledData() {
-    setSegmentStatus(null);
+    setDownloadStatus(null);
     try {
       const res = await fetch('/api/download-labeled-data');
+      if (!res.ok) {
+        throw new Error('Failed response');
+      }
       const blob = await res.blob();
       // Trigger browser download
       const url = window.URL.createObjectURL(blob);
@@ -151,6 +154,7 @@ export default function Home() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+      setDownloadStatus('labeled_data.json downloaded successfully');
     } catch {
       setSegmentStatus('Error: download failed')
     }
@@ -354,7 +358,12 @@ export default function Home() {
           >
             Download labeled_data.json
           </button> 
-          {segmentStatus && <p className="mt-2 text-sm">{segmentStatus}</p>}
+          {segmentStatus && (
+            <p className="mt-2 text-sm">{segmentStatus}</p>
+          )}
+          {downloadStatus && (
+            <p className="text-sm">{downloadStatus}</p>
+          )}
           </div>
         </div>
 

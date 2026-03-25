@@ -4,6 +4,9 @@ import type { Valley, HeartRateResult, HRVResult } from '../types';
 
 export const FPS = 30;
 /** 10 seconds at 30 fps. Use consistently for chart, valley detection, save, and inference. */
+/* `export const` is used in TypeScript to export a constant variable from a module. This allows the
+constant variable to be accessed and used in other modules that import this module. By exporting a
+constant variable, it can be imported and used in other parts of the codebase. */
 export const SAMPLES_TO_KEEP = 300;
 /** Minimum samples before running valley detection (2 seconds). */
 export const MIN_SAMPLES_FOR_DETECTION = 60;
